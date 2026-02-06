@@ -1,11 +1,209 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>一杯飲むゲーム</title>
+<meta charset="UTF-8">
+<title>一杯飲むゲーム</title>https://github.com/ren-930/Hoken002/edit/main/index.html
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * {
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
+
+  body {
+    margin: 0;
+    height: 100vh;
+    background: #111;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ===== メーター ===== */
+  .meter {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 6px;
+    padding: 16px;
+  }
+
+  .meter div {
+    height: 20px;
+    background: #333;
+    border-radius: 4px;
+    transition: background 0.3s;
+  }
+
+  .meter div.active {
+    background: #4ade80;
+  }
+
+  /* ===== 一杯飲むボタン ===== */
+  .drink-btn {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: #fb7185;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+
+  .drink-btn:active {
+    transform: scale(0.9);
+  }
+
+  /* ===== STOPボタン ===== */
+  .stop-btn {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    padding: 14px 24px;
+    font-size: 16px;
+    background: #ef4444;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+
+  .stop-btn:active {
+    transform: scale(0.9);
+  }
+
+  /* ===== ? ボタン ===== */
+  .help-btn {
+    position: absolute;
+    right: 20px;
+    top: 80px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #38bdf8;
+    border: none;
+    font-size: 22px;
+    color: #000;
+    cursor: pointer;
+  }
+
+  /* ===== ルール画面 ===== */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+
+  .rule-box {
+    background: #222;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 90%;
+    text-align: center;
+  }
+
+  .rule-box img {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+
+  .close-btn {
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: #fbbf24;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  /* ===== 終了画面 ===== */
+  .end-screen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    color: white;
+    font-size: 28px;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
 </head>
 <body>
-  <h1>一杯飲む</h1>
-  <p>テスト表示です</p>
+
+<!-- メーター -->
+<div class="meter" id="meter"></div>
+
+<!-- ボタン -->
+<button class="drink-btn" id="drink">一杯飲む</button>
+<button class="stop-btn" id="stop">STOP</button>
+<button class="help-btn" id="help">?</button>
+
+<!-- ルール -->
+<div class="overlay" id="overlay">
+  <div class="rule-box">
+    <!-- ここにルール画像 -->
+    <img src="rule.png" alt="ルール説明">
+    <br>
+    <button class="close-btn" id="close">閉じる</button>
+  </div>
+</div>
+
+<!-- 終了画面 -->
+<div class="end-screen" id="end">
+  ゲーム終了
+</div>
+
+<script>
+  const meter = document.getElementById("meter");
+  const drinkBtn = document.getElementById("drink");
+  const stopBtn = document.getElementById("stop");
+  const helpBtn = document.getElementById("help");
+  const overlay = document.getElementById("overlay");
+  const closeBtn = document.getElementById("close");
+  const endScreen = document.getElementById("end");
+
+  let level = 0;
+  const max = 11;
+
+  // メーター生成
+  for (let i = 0; i < max; i++) {
+    const d = document.createElement("div");
+    meter.appendChild(d);
+  }
+
+  // 一杯飲む
+  drinkBtn.onclick = () => {
+    if (level >= max) return;
+    meter.children[level].classList.add("active");
+    level++;
+  };
+
+  // STOP
+  stopBtn.onclick = () => {
+    endScreen.style.display = "flex";
+  };
+
+  // ルール表示
+  helpBtn.onclick = () => {
+    overlay.style.display = "flex";
+  };
+
+  closeBtn.onclick = () => {
+    overlay.style.display = "none";
+  };
+</script>
+
 </body>
 </html>
