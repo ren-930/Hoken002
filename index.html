@@ -2,82 +2,81 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-  <title>一杯ゲーム</title>
+<title>一杯飲むゲーム</title>
 <style>
-  html, body {
+  /* 全体リセット */
+  * {
     margin: 0;
     padding: 0;
-    height: 100%;
+    box-sizing: border-box;
+    font-family: sans-serif;
   }
 
   body {
-    background-color:  black;
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0;
-    padding: 0;
     height: 100vh;
   }
 
+  /* ゲーム枠 */
   .game-container {
     width: 600px;
-    height: 400px;
-    background-image: url('nighttown.jpeg');
+    height: 500px;
+    background-image: url('nighttown.jpg'); /* ゲーム枠背景 */
     background-size: cover;
     background-position: center;
-    border-radious: 20px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    border-radius: 20px;
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: 20px;
   }
 
   /* メーター */
   .meter {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    align-items: flex-end;
+    margin-bottom: 10px;
   }
 
   .meter div {
-    width: 8%;
+    width: 45px;
     height: 30px;
-    background: #ddd;
-    border-radius: 4px;
+    border: 2px solid #fff;
+    background-color: #333;
+    color: black;
+    font-weight: bold;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 14px;
-    color: black;
+    border-radius: 6px;
   }
 
-  .meter div.active {
-    background: #ff5555;
-  }
-
-  /* 丸ボタン */
-  .drink-btn {
-    width: 80px;
-    height: 80px;
+  /* 一杯飲むボタン */
+  #drink-btn {
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
-    background: #00ccff;
-    border: none;
+    background-color: #ff7f50;
     color: white;
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
     cursor: pointer;
+    align-self: center;
     transition: transform 0.1s;
-    align-self: flex-start;
-    margin-left: 20px;
   }
 
-  .drink-btn:active {
+  #drink-btn:active {
     transform: scale(0.9);
   }
 
   /* STOPボタン */
-  .stop-btn {
+  #stop-btn {
     position: absolute;
     bottom: 20px;
     right: 20px;
@@ -85,54 +84,42 @@
     font-size: 16px;
     border-radius: 6px;
     border: none;
-    background: #ff5555;
+    background-color: #ff4c4c;
     color: white;
     cursor: pointer;
-    transition: transform 0.1s;
   }
 
-  .stop-btn:active {
-    transform: scale(0.95);
-  }
-
-  /* ルール？ボタン */
-  .rule-btn {
+  /* ？ボタン */
+  #rule-btn {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
+    bottom: 20px;
+    right: 100px;
+    padding: 8px 16px;
+    font-size: 18px;
     border-radius: 50%;
-    background: #ffff66;
     border: none;
-    font-weight: bold;
+    background-color: #66ccff;
+    color: white;
     cursor: pointer;
-    font-size: 20px;
   }
 
-  /* ルール画像モーダル */
-  .rule-modal {
-    display: none;
-    position: fixed;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.8);
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-  }
-
-  .rule-modal img {
-    max-width: 90%;
-    max-height: 90%;
-    border: 5px solid white;
-    border-radius: 10px;
+  /* 中央下画像 */
+  #drink-image {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
   }
 </style>
 </head>
 <body>
 
 <div class="game-container">
-  <div class="meter" id="meter">
+  <!-- メーター -->
+  <div class="meter">
     <div>1</div>
     <div>2</div>
     <div>3</div>
@@ -146,42 +133,65 @@
     <div>10+</div>
   </div>
 
-  <button class="drink-btn" id="drinkBtn">一杯飲む</button>
-  <button class="stop-btn" id="stopBtn">STOP</button>
-  <button class="rule-btn" id="ruleBtn">?</button>
-  
-  <div class="rule-modal" id="ruleModal">
-  <img src="rule.png" alt="ルール説明">
-  </div>
-  
+  <!-- 一杯飲むボタン -->
+  <button id="drink-btn">一杯飲む</button>
+
+  <!-- 中央下画像 -->
+  <img id="drink-image" src="drink0.png" alt="drink">
+
+  <!-- STOPボタン -->
+  <button id="stop-btn">STOP</button>
+
+  <!-- ルールボタン -->
+  <button id="rule-btn">?</button>
 </div>
 
 <script>
-let count = 0;
-const meter = document.getElementById('meter').children;
-const drinkBtn = document.getElementById('drinkBtn');
-const stopBtn = document.getElementById('stopBtn');
-const ruleBtn = document.getElementById('ruleBtn');
-const ruleModal = document.getElementById('ruleModal');
+  const drinkBtn = document.getElementById('drink-btn');
+  const meterDivs = document.querySelectorAll('.meter div');
+  const drinkImage = document.getElementById('drink-image');
+  let count = 0;
 
-drinkBtn.addEventListener('click', () => {
-  if(count < meter.length) {
-    meter[count].classList.add('active');
-    count++;
+  // 画像の区切り
+  const images = [
+    'Yoi1.png', // 0
+    'Yoi2.png', // 1~2
+    'Yoi3.png', // 3
+    'Yoi4.png', // 4~6
+    'Yoi5.png', // 7~10
+    'Yoi6.png', // 10+
+  ];
+
+  function updateMeter() {
+    meterDivs.forEach((div, idx) => {
+      div.style.backgroundColor = (idx < count) ? '#ffcc00' : '#333';
+    });
+
+    // 画像切り替え
+    if(count === 0) drinkImage.src = images[0];
+    else if(count <= 2) drinkImage.src = images[1];
+    else if(count === 3) drinkImage.src = images[2];
+    else if(count <= 6) drinkImage.src = images[3];
+    else if(count <= 10) drinkImage.src = images[4];
+    else drinkImage.src = images[5];
   }
-});
 
-stopBtn.addEventListener('click', () => {
-  alert("ゲーム終了！結果: " + count + "杯");
-});
+  drinkBtn.addEventListener('click', () => {
+    count++;
+    updateMeter();
+  });
 
-ruleBtn.addEventListener('click', () => {
-  ruleModal.style.display = 'flex';
-});
+  document.getElementById('stop-btn').addEventListener('click', () => {
+    alert('ゲーム終了！');
+    // ここで次の画面に移動する処理を書ける
+  });
 
-ruleModal.addEventListener('click', () => {
-  ruleModal.style.display = 'none';
-});
+  document.getElementById('rule-btn').addEventListener('click', () => {
+    alert('ルール説明画像を表示する処理を書こう');
+    // モーダルで画像表示するなど
+  });
+
+  updateMeter();
 </script>
 
 </body>
