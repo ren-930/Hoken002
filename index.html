@@ -24,7 +24,7 @@
   .game-container {
     width: 600px;
     height: 500px;
-    background-image: url('nighttown.jpg'); /* ゲーム枠背景 */
+    background-image: url('nighttown.jpeg'); /* ゲーム枠背景 */
     background-size: cover;
     background-position: center;
     border-radius: 20px;
@@ -58,6 +58,9 @@
 
   /* 一杯飲むボタン */
   #drink-btn {
+    potision: absolute;
+    bottom: 20px;
+    left: 20px;
     width: 120px;
     height: 120px;
     border-radius: 50%;
@@ -67,7 +70,6 @@
     font-weight: bold;
     border: none;
     cursor: pointer;
-    align-self: center;
     transition: transform 0.1s;
   }
 
@@ -92,8 +94,8 @@
   /* ？ボタン */
   #rule-btn {
     position: absolute;
-    bottom: 20px;
-    right: 100px;
+    bottom: 90px;
+    right: 20px;
     padding: 8px 16px;
     font-size: 18px;
     border-radius: 50%;
