@@ -283,10 +283,16 @@ document.getElementById('stop-btn').addEventListener('click', () => {
   // 画像によって説明分岐
   switch(currentImg){
     case "Yoi1.png":
-      resultText.textContent = "まだまだ余裕！";
+      resultText.textContent = "ビール0杯！<br>異常なし";
+      break;
+    case "Yoi2.png":
+      resultText.textContent = "ビール1~2杯！(500~1000ml)<br>ほろ酔い気分になり、皮膚が赤くなる、判断力も少し鈍る";
       break;
     case "Yoi3.png":
-      resultText.textContent = "ちょっと酔ってきた？";
+      resultText.textContent = "かなり酔ってます！";
+      break;
+    case "Yoi4.png":
+      resultText.textContent = "かなり酔ってます！";
       break;
     case "Yoi5.png":
       resultText.textContent = "かなり酔ってます！";
