@@ -56,6 +56,48 @@
     border-radius: 6px;
   }
 
+/* ===== モーダル ===== */
+.modal{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.3s ease;
+}
+
+.modal.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.modal-content{
+  background:#eee;
+  width:300px;
+  padding:20px;
+  border-radius:15px;
+  text-align:center;
+  transform:scale(0.5);
+  transition:transform 0.3s ease;
+}
+
+.modal.show .modal-content{
+  transform:scale(1);
+}
+
+.modal-content img{
+  width:150px;
+  margin-bottom:15px;
+}
+
+.modal-content button{
+  margin-top:15px;
+  padding:8px 20px;
+}
+  
   /* 一杯飲むボタン */
   #drink-btn {
     potision: absolute;
@@ -135,6 +177,15 @@
     <div>10+</div>
   </div>
 
+  <!-- モーダル -->
+  <div id="result-modal" class="modal">
+    <div class="modal-content">
+      <img id="result-image" src="" alt="">
+      <p id="result-text"></p>
+      <button id="reload-btn">もう一回遊ぶ</button>
+    </div>
+  </div>
+
   <!-- 一杯飲むボタン -->
   <button id="drink-btn">一杯飲む</button>
 
@@ -183,17 +234,37 @@
     updateMeter();
   });
 
-  document.getElementById('stop-btn').addEventListener('click', () => {
-    alert('ゲーム終了！');
-    // ここで次の画面に移動する処理を書ける
-  });
+  const modal = document.getElementById("result-modal");
+const resultImage = document.getElementById("result-image");
+const resultText = document.getElementById("result-text");
 
-  document.getElementById('rule-btn').addEventListener('click', () => {
-    alert('ルール説明画像を表示する処理を書こう');
-    // モーダルで画像表示するなど
-  });
+document.getElementById('stop-btn').addEventListener('click', () => {
 
-  updateMeter();
+  // 今表示されてる画像を取得
+  const currentImg = drinkImage.src.split("/").pop();
+
+  resultImage.src = currentImg;
+
+  // 画像によって説明分岐
+  switch(currentImg){
+    case "Yoi1.png":
+      resultText.textContent = "まだまだ余裕！";
+      break;
+    case "Yoi3.png":
+      resultText.textContent = "ちょっと酔ってきた？";
+      break;
+    case "Yoi5.png":
+      resultText.textContent = "かなり酔ってます！";
+      break;
+    case "Yoi7.png":
+      resultText.textContent = "限界突破！！";
+      break;
+    default:
+      resultText.textContent = "いい感じに酔ってます。";
+  }
+
+  modal.classList.add("show");
+});
 </script>
 
 </body>
