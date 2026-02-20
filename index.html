@@ -160,7 +160,15 @@
 </style>
 </head>
 <body>
-
+  
+<!-- ルールモーダル -->
+<div id="rule-modal" class="modal">
+  <div class="modal-content">
+    <img id="rule-image" src="rule.png" alt="ルール説明">
+    <button id="rule-close-btn">閉じる</button>
+  </div>
+</div>
+  
 <div class="game-container">
   <!-- メーター -->
   <div class="meter">
@@ -197,9 +205,22 @@
 
   <!-- ルールボタン -->
   <button id="rule-btn">?</button>
+
+  
 </div>
 
 <script>
+
+const ruleModal = document.getElementById("rule-modal");
+
+document.getElementById("rule-btn").addEventListener("click", () => {
+  ruleModal.classList.add("show");
+});
+
+document.getElementById("rule-close-btn").addEventListener("click", () => {
+  ruleModal.classList.remove("show");
+});
+  
   const drinkBtn = document.getElementById('drink-btn');
   const meterDivs = document.querySelectorAll('.meter div');
   const drinkImage = document.getElementById('drink-image');
