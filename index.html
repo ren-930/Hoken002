@@ -55,10 +55,9 @@
     align-items: center;
     border-radius: 6px;
   }
-
-/* ===== モーダル ===== */
+  
 .modal{
-  position:absolute;
+  position:fixed;   /* ← absolute じゃなく fixed */
   inset:0;
   background:rgba(0,0,0,0.6);
   display:flex;
@@ -67,6 +66,7 @@
   opacity:0;
   pointer-events:none;
   transition:opacity 0.3s ease;
+  z-index:999;      /* ← 最前面 */
 }
 
 .modal.show{
