@@ -220,6 +220,12 @@ document.getElementById("rule-btn").addEventListener("click", () => {
 document.getElementById("rule-close-btn").addEventListener("click", () => {
   ruleModal.classList.remove("show");
 });
+
+ruleModal.addEventListener("click", (e) => {
+  if(e.target === ruleModal){
+    ruleModal.classList.remove("show");
+  }
+});
   
   const drinkBtn = document.getElementById('drink-btn');
   const meterDivs = document.querySelectorAll('.meter div');
