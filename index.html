@@ -105,7 +105,17 @@
 #rule-image{
   width: 100%;
 }
-  
+
+#prev-btn, #next-btn{
+  padding:6px 15px;
+  margin:0 5px;
+  border:none;
+  border-radius:6px;
+  background:#66ccff;
+  color:white;
+  cursor:pointer;
+}
+
   /* 一杯飲むボタン */
   #drink-btn {
     position: absolute;
@@ -177,10 +187,15 @@
 <!-- ルールモーダル -->
 <div id="rule-modal" class="modal">
   <div class="modal-content">
-    <img id="rule-image" src="rule.png" alt="ルール説明">
-    <button id="rule-close-btn">閉じる</button>
+    <img id="rule-image" src="rule1.png" alt="ルール説明">
+
+    <div style="margin-top:10px;">
+      <button id="prev-btn">＜前へ</button>
+      <button id="next-btn">次へ＞</button>
+    </div>
+
+    <button id="rule-close-btn">閉じる</button>  
   </div>
-</div>
   
 <div class="game-container">
   <!-- メーター -->
@@ -238,6 +253,46 @@ ruleModal.addEventListener("click", (e) => {
   if(e.target === ruleModal){
     ruleModal.classList.remove("show");
   }
+});
+
+// ===== ルール画像スライド =====
+const ruleImage = document.getElementById("rule-image");
+const prevBtn = document.getElementById("prev-btn");
+const nextBtn = document.getElementById("next-btn");
+
+const ruleImages = [
+  "rule1.png",
+  "rule2.png"
+];
+
+let ruleIndex = 0;
+
+function updateRuleImage(){
+  ruleImage.src = ruleImages[ruleIndex];
+
+  // 端ではボタンを消す
+  prevBtn.style.visibility = ruleIndex === 0 ? "hidden" : "visible";
+  nextBtn.style.visibility = ruleIndex === ruleImages.length - 1 ? "hidden" : "visible";
+}
+
+nextBtn.addEventListener("click", () => {
+  if(ruleIndex < ruleImages.length - 1){
+    ruleIndex++;
+    updateRuleImage();
+  }
+});
+
+prevBtn.addEventListener("click", () => {
+  if(ruleIndex > 0){
+    ruleIndex--;
+    updateRuleImage();
+  }
+});
+
+// モーダル開いた時は1枚目に戻す
+document.getElementById("rule-btn").addEventListener("click", () => {
+  ruleIndex = 0;
+  updateRuleImage();
 });
   
   const drinkBtn = document.getElementById('drink-btn');
